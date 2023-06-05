@@ -1,21 +1,16 @@
-$(document).ready(function() {
-  let amenities = [];
-
-  // Listen for changes on each input checkbox tag
-  $('input[type="checkbox"]').change(function() {
-    let amenityId = $(this).parent().data('id');
-    let amenityName = $(this).parent().data('name');
-
+$(document).ready(function () {
+  let checkedAmenities = {};
+  $(document).on('change', "input[type='checkbox']", function () {
     if (this.checked) {
-      amenities.push(amenityId);
+      checkedAmenities[$(this).data('id')] = $(this).data('name');
     } else {
-      let index = amenities.indexOf(amenityId);
-      if (index !== -1) {
-        amenities.splice(index, 1);
-      }
+      delete checkedAmenities[$(this).data('id')];
     }
-
-    // Update the h4 tag inside the div Amenities with the list of selected menities
-    $('.amenities h4').text(amenities.length > 0 ? amenities.join(', ') : 'None');
+    let lst = Object.values(checkedAmenities);
+    if (lst.length > 0) {
+      $('div.amenities > h4').text(Object.values(checkedAmenities).join(', '));
+    } else {
+      $('div.amenities > h4').html('&nbsp;');
+    }
   });
 });
